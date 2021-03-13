@@ -2,31 +2,24 @@
  * Copyright (C) 2010, 2011, 2012 Herbert von Broeuschmeul
  * Copyright (C) 2010, 2011, 2012 BluetoothGPS4Droid Project
  * Copyright (C) 2011, 2012 UsbGPS4Droid Project
- * 
+ *
  * This file is part of UsbGPS4Droid.
  *
  * UsbGPS4Droid is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * UsbGPS4Droid is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  *  You should have received a copy of the GNU General Public License
  *  along with UsbGPS4Droid. If not, see <http://www.gnu.org/licenses/>.
  */
 
 package org.broeuschmeul.android.gps.nmea.util;
-
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.Locale;
-import java.util.TimeZone;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
@@ -42,7 +35,16 @@ import android.text.TextUtils.SimpleStringSplitter;
 import android.util.Log;
 
 import org.broeuschmeul.android.gps.usb.provider.BuildConfig;
-import org.broeuschmeul.android.gps.usb.provider.USBGpsApplication;;
+import org.broeuschmeul.android.gps.usb.provider.USBGpsApplication;
+
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Locale;
+import java.util.TimeZone;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
+;
 
 /**
  * This class is used to parse NMEA sentences an generate the Android Locations when there is a new GPS FIX.
@@ -52,14 +54,12 @@ import org.broeuschmeul.android.gps.usb.provider.USBGpsApplication;;
  * @author Herbert von Broeuschmeul
  */
 public class NmeaParser {
+    public static final String SATELLITE_KEY = "satellites";
+    public static final String SYSTEM_TIME_FIX = "system_time_fix";
     /**
      * Tag used for log messages
      */
     private static final String LOG_TAG = NmeaParser.class.getSimpleName();
-
-    public static final String SATELLITE_KEY = "satellites";
-    public static final String SYSTEM_TIME_FIX = "system_time_fix";
-
     private Context appContext;
 
     private String fixTime = null;
@@ -107,11 +107,11 @@ public class NmeaParser {
 
                     if (prov != null) {
                         log("Mock provider: " +
-                                            prov.getName() +
-                                            " " +
-                                            prov.getPowerRequirement() +
-                                            " " + prov.getAccuracy() +
-                                            " " + lm.isProviderEnabled(mockLocationProvider)
+                                prov.getName() +
+                                " " +
+                                prov.getPowerRequirement() +
+                                " " + prov.getAccuracy() +
+                                " " + lm.isProviderEnabled(mockLocationProvider)
                         );
 
                         try {
@@ -247,6 +247,7 @@ public class NmeaParser {
 
     /**
      * Notifies a new location fix to the MockLocationProvider
+     *
      * @param fix the location
      * @throws SecurityException
      */

@@ -16,21 +16,26 @@ import java.util.ArrayList;
 public class USBGpsApplication extends Application {
     private static boolean locationAsked = true;
 
-    private int LOG_SIZE = 100;
-
-    private final ArrayList<ServiceDataListener> serviceDataListeners = new ArrayList<>();
-    private Location lastLocation;
-    private ArrayList<String> logLines = new ArrayList<>();
-
-    private Handler mainHandler;
-
     static {
 
     }
 
-    public interface ServiceDataListener {
-        void onNewSentence(String sentence);
-        void onLocationNotified(Location location);
+    private final ArrayList<ServiceDataListener> serviceDataListeners = new ArrayList<>();
+    private int LOG_SIZE = 100;
+    private Location lastLocation;
+    private ArrayList<String> logLines = new ArrayList<>();
+    private Handler mainHandler;
+
+    public static void setLocationAsked() {
+        locationAsked = true;
+    }
+
+    public static boolean wasLocationAsked() {
+        return locationAsked;
+    }
+
+    public static void setLocationNotAsked() {
+        locationAsked = false;
     }
 
     private void setupDaynightMode() {
@@ -38,8 +43,8 @@ public class USBGpsApplication extends Application {
         boolean on = preferences.getBoolean(getString(R.string.pref_daynight_theme_key), false);
 
         AppCompatDelegate.setDefaultNightMode(on ?
-                        AppCompatDelegate.MODE_NIGHT_AUTO:
-                        AppCompatDelegate.MODE_NIGHT_YES
+                AppCompatDelegate.MODE_NIGHT_AUTO :
+                AppCompatDelegate.MODE_NIGHT_YES
         );
     }
 
@@ -52,19 +57,6 @@ public class USBGpsApplication extends Application {
             logLines.add("");
         }
         super.onCreate();
-    }
-
-
-    public static void setLocationAsked() {
-        locationAsked = true;
-    }
-
-    public static boolean wasLocationAsked() {
-        return locationAsked;
-    }
-
-    public static void setLocationNotAsked() {
-        locationAsked = false;
     }
 
     public String[] getLogLines() {
@@ -94,7 +86,7 @@ public class USBGpsApplication extends Application {
             mainHandler.post(new Runnable() {
                 @Override
                 public void run() {
-                    for (ServiceDataListener dataListener: serviceDataListeners) {
+                    for (ServiceDataListener dataListener : serviceDataListeners) {
                         dataListener.onNewSentence(sentence);
                     }
                 }
@@ -109,12 +101,18 @@ public class USBGpsApplication extends Application {
             mainHandler.post(new Runnable() {
                 @Override
                 public void run() {
-                    for (ServiceDataListener dataListener: serviceDataListeners) {
+                    for (ServiceDataListener dataListener : serviceDataListeners) {
                         dataListener.onLocationNotified(location);
                     }
                 }
             });
 
         }
+    }
+
+    public interface ServiceDataListener {
+        void onNewSentence(String sentence);
+
+        void onLocationNotified(Location location);
     }
 }

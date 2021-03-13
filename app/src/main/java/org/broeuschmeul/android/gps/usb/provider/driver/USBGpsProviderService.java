@@ -3,32 +3,24 @@
  * Copyright (C) 2010, 2011, 2012 Herbert von Broeuschmeul
  * Copyright (C) 2010, 2011, 2012 BluetoothGPS4Droid Project
  * Copyright (C) 2011, 2012 UsbGPS4Droid Project
- * 
+ *
  * This file is part of UsbGPS4Droid.
  *
  * UsbGPS4Droid is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
- * 
+ *
  * UsbGPS4Droid is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  *  You should have received a copy of the GNU General Public License
  *  along with UsbGPS4Droid. If not, see <http://www.gnu.org/licenses/>.
  */
 
 package org.broeuschmeul.android.gps.usb.provider.driver;
-
-import java.io.BufferedWriter;
-import java.io.File;
-import java.io.FileWriter;
-import java.io.IOException;
-import java.io.PrintWriter;
-import java.text.SimpleDateFormat;
-import java.util.Date;
 
 import android.Manifest;
 import android.annotation.SuppressLint;
@@ -37,7 +29,6 @@ import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.app.Service;
-
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
@@ -51,15 +42,23 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.IBinder;
 import android.preference.PreferenceManager;
+import android.support.v4.app.NotificationCompat;
 import android.support.v4.content.ContextCompat;
 import android.util.Log;
 import android.widget.Toast;
-import android.support.v4.app.NotificationCompat;
 
 import org.broeuschmeul.android.gps.usb.provider.BuildConfig;
 import org.broeuschmeul.android.gps.usb.provider.R;
 import org.broeuschmeul.android.gps.usb.provider.ui.GpsInfoActivity;
 import org.broeuschmeul.android.gps.usb.provider.ui.USBGpsSettingsFragment;
+
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.io.PrintWriter;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 /**
  * A Service used to replace Android internal GPS with a USB GPS and/or write GPS NMEA data in a File.
@@ -99,12 +98,6 @@ public class USBGpsProviderService extends Service implements USBGpsManager.Nmea
     public static final String PREF_TOAST_LOGGING = "showToasts";
     public static final String PREF_SET_TIME = "setTime";
     public static final String PREF_ABOUT = "about";
-
-    /**
-     * Tag used for log messages
-     */
-    private static final String LOG_TAG = USBGpsProviderService.class.getSimpleName();
-
     public static final String PREF_SIRF_GPS = "sirfGps";
     public static final String PREF_SIRF_ENABLE_GGA = "enableGGA";
     public static final String PREF_SIRF_ENABLE_RMC = "enableRMC";
@@ -116,7 +109,10 @@ public class USBGpsProviderService extends Service implements USBGpsManager.Nmea
     public static final String PREF_SIRF_ENABLE_SBAS = "enableSBAS";
     public static final String PREF_SIRF_ENABLE_NMEA = "enableNMEA";
     public static final String PREF_SIRF_ENABLE_STATIC_NAVIGATION = "enableStaticNavigation";
-
+    /**
+     * Tag used for log messages
+     */
+    private static final String LOG_TAG = USBGpsProviderService.class.getSimpleName();
     private static final String NOTIFICATION_CHANNEL_ID = "service_notification";
 
     private USBGpsManager gpsManager = null;
@@ -127,32 +123,6 @@ public class USBGpsProviderService extends Service implements USBGpsManager.Nmea
     private boolean debugToasts = false;
 
     private NotificationManager notificationManager;
-
-    /**
-     * Will start the service if set so in settings when the device boots
-     */
-    public static class BootReceiver extends BroadcastReceiver {
-        @Override
-        public void onReceive(final Context context, Intent intent) {
-            SharedPreferences sharedPreferences =
-                    PreferenceManager.getDefaultSharedPreferences(context);
-            if (BuildConfig.DEBUG) Log.d(LOG_TAG, intent.getAction());
-
-            if (intent.getAction().equals(Intent.ACTION_BOOT_COMPLETED) &&
-                    sharedPreferences.getBoolean(PREF_START_ON_BOOT, false))  {
-                new Handler(context.getMainLooper()).postDelayed(new Runnable() {
-                    @Override
-                    public void run() {
-                        if (BuildConfig.DEBUG) Log.d(LOG_TAG, "Boot start");
-                        context.startService(
-                                new Intent(context, USBGpsProviderService.class)
-                                        .setAction(ACTION_START_GPS_PROVIDER)
-                        );
-                    }
-                }, 2000);
-            }
-        }
-    }
 
     @Override
     public void onCreate() {
@@ -448,5 +418,31 @@ public class USBGpsProviderService extends Service implements USBGpsManager.Nmea
 
     private void log(String message) {
         if (BuildConfig.DEBUG) Log.d(LOG_TAG, message);
+    }
+
+    /**
+     * Will start the service if set so in settings when the device boots
+     */
+    public static class BootReceiver extends BroadcastReceiver {
+        @Override
+        public void onReceive(final Context context, Intent intent) {
+            SharedPreferences sharedPreferences =
+                    PreferenceManager.getDefaultSharedPreferences(context);
+            if (BuildConfig.DEBUG) Log.d(LOG_TAG, intent.getAction());
+
+            if (intent.getAction().equals(Intent.ACTION_BOOT_COMPLETED) &&
+                    sharedPreferences.getBoolean(PREF_START_ON_BOOT, false)) {
+                new Handler(context.getMainLooper()).postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        if (BuildConfig.DEBUG) Log.d(LOG_TAG, "Boot start");
+                        context.startService(
+                                new Intent(context, USBGpsProviderService.class)
+                                        .setAction(ACTION_START_GPS_PROVIDER)
+                        );
+                    }
+                }, 2000);
+            }
+        }
     }
 }

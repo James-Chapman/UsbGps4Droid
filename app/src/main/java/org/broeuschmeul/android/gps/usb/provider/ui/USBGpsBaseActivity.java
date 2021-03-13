@@ -21,17 +21,17 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.preference.PreferenceFragmentCompat;
 import android.view.MenuItem;
 
-import org.broeuschmeul.android.gps.usb.provider.USBGpsApplication;
 import org.broeuschmeul.android.gps.usb.provider.R;
+import org.broeuschmeul.android.gps.usb.provider.USBGpsApplication;
 import org.broeuschmeul.android.gps.usb.provider.driver.USBGpsProviderService;
 
 /**
  * Created by freshollie on 15/05/17.
- *
+ * <p>
  * Any activity in this app extends this activity.
- *
+ * <p>
  * This Activity will show the stop dialogs and take care of permissions.
- *
+ * <p>
  * It will also show the settings in a given layout ID and handle
  * the nested settings.
  */
@@ -41,19 +41,14 @@ public abstract class USBGpsBaseActivity extends AppCompatActivity implements
         SharedPreferences.OnSharedPreferenceChangeListener {
 
     private static final String TAG_NESTED = "NESTED_PREFERENCE_SCREEN";
-
+    private static final int LOCATION_REQUEST = 238472383;
+    private static final int STORAGE_REQUEST = 8972842;
     private SharedPreferences sharedPreferences;
     private NotificationManager notificationManager;
     private ActivityManager activityManager;
-
     private boolean shouldInitialise = true;
-
     private int resSettingsHolder;
     private boolean tryingToStart;
-
-    private static final int LOCATION_REQUEST = 238472383;
-    private static final int STORAGE_REQUEST = 8972842;
-
     private boolean homeAsUp = false;
 
     private boolean lastDaynightSetting = false;
@@ -88,6 +83,7 @@ public abstract class USBGpsBaseActivity extends AppCompatActivity implements
 
     /**
      * Recreate the activity if we resume but the daynight setting has changed
+     *
      * @return
      */
     private void handleDaynightSettingChange() {
@@ -193,6 +189,7 @@ public abstract class USBGpsBaseActivity extends AppCompatActivity implements
 
     /**
      * Checks if the applications has the given runtime permission
+     *
      * @param perm
      * @return
      */
@@ -262,7 +259,7 @@ public abstract class USBGpsBaseActivity extends AppCompatActivity implements
      * This checks if the service is running from the running preferences list
      */
     public boolean isServiceRunning() {
-        for (ActivityManager.RunningServiceInfo service: activityManager.getRunningServices(Integer.MAX_VALUE)) {
+        for (ActivityManager.RunningServiceInfo service : activityManager.getRunningServices(Integer.MAX_VALUE)) {
             if (USBGpsProviderService.class.getName().equals(service.service.getClassName())) {
                 return true;
             }
@@ -355,7 +352,7 @@ public abstract class USBGpsBaseActivity extends AppCompatActivity implements
 
     /**
      * Called when a nested preference screen is clicked by the root preference screen
-     *
+     * <p>
      * Makes that fragment the now visible fragment
      */
     @Override

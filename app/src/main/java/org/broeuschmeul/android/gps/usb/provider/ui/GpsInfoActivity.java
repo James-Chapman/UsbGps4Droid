@@ -17,8 +17,8 @@ import android.widget.ScrollView;
 import android.widget.TextView;
 
 import org.broeuschmeul.android.gps.nmea.util.NmeaParser;
-import org.broeuschmeul.android.gps.usb.provider.USBGpsApplication;
 import org.broeuschmeul.android.gps.usb.provider.R;
+import org.broeuschmeul.android.gps.usb.provider.USBGpsApplication;
 import org.broeuschmeul.android.gps.usb.provider.driver.USBGpsProviderService;
 
 import java.text.DecimalFormat;
@@ -28,7 +28,7 @@ import java.util.Locale;
 
 /**
  * Created by Oliver Bell 5/12/15
- *
+ * <p>
  * This activity displays a log, as well as the GPS info. If the users device is
  * large enough and in landscape, the settings fragment will be shown alongside
  */
@@ -36,9 +36,8 @@ import java.util.Locale;
 public class GpsInfoActivity extends USBGpsBaseActivity implements
         USBGpsApplication.ServiceDataListener {
 
-    private SharedPreferences sharedPreferences;
     private static final String TAG = GpsInfoActivity.class.getSimpleName();
-
+    private SharedPreferences sharedPreferences;
     private USBGpsApplication application;
 
     private SwitchCompat startSwitch;
