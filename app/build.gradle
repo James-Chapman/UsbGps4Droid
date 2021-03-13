@@ -1,14 +1,14 @@
 apply plugin: 'com.android.application'
 android {
-    compileSdkVersion 27
-    buildToolsVersion '27.0.1'
+    compileSdkVersion 28
+    buildToolsVersion '29.0.3'
     defaultConfig {
         applicationId "org.broeuschmeul.android.gps.usb.provider"
-        minSdkVersion 14
-        targetSdkVersion 27
+        minSdkVersion 28
+        targetSdkVersion 28
 
         versionCode 199
-        versionName "v2.2.1"
+        versionName "v2.2.999"
         vectorDrawables.useSupportLibrary = true
 
         setProperty("archivesBaseName", "UsbGps4Droid-$versionName")
